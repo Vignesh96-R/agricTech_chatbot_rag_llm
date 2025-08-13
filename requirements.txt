@@ -1,0 +1,54 @@
+# Build tools dependencies (recommended first)
+setuptools>=65.0.0  # Python package building and distribution utility
+wheel>=0.38.0       # Built-package format for Python
+
+# Core Framework Dependencies
+fastapi>=0.104.0    # High-performance web framework for building APIs
+uvicorn[standard]>=0.24.0  # ASGI server for running FastAPI applications
+streamlit>=1.28.0   # Framework for building interactive web apps for data science
+
+# Data Processing & Database
+pandas>=2.0.0       # Data manipulation and analysis library
+duckdb>=0.9.0       # In-process SQL OLAP database
+numpy>=1.24.0       # Library for numerical computing in Python
+
+# AI & Machine Learning
+openai>=1.3.0       # API client for OpenAI models
+langchain>=0.3.0    # Framework for building applications with language models
+langchain-community>=0.3.0  # Community extensions for LangChain
+langchain-core>=0.3.63      # Core utilities for LangChain
+langchain-chroma>=0.2.4     # ChromaDB integration for LangChain
+langchain-openai>=0.2.0     # OpenAI integration for LangChain
+langchain-cohere>=0.4.5     # Cohere integration for LangChain
+langchain-text-splitters>=0.3.0  # Text splitting utilities for LangChain
+chromadb>=0.4.0     # Vector database for embeddings
+sentence-transformers>=2.2.0  # Library for computing sentence embeddings
+
+# Authentication & Security
+passlib[bcrypt]>=1.7.4  # Password hashing library
+bcrypt>=4.0.0       # Library for hashing and verifying passwords
+python-multipart>=0.0.6  # Handling multipart/form-data (file uploads)
+python-dotenv>=1.0.0  # Load environment variables from .env files
+
+# HTTP & API
+requests>=2.31.0    # HTTP library for making requests
+httpx>=0.25.0       # Async HTTP client for Python
+
+# Data Validation & Serialization
+pydantic>=2.0.0     # Data validation and settings management using Python type hints
+pydantic-settings>=2.0.0  # Management of configuration settings with Pydantic
+
+# File Processing
+tabulate>=0.9.0     # Pretty-print tabular data in Python
+
+# Utilities
+python-dateutil>=2.8.0  # Powerful extensions to Python's datetime module
+
+# Development & Testing (optional)
+pytest>=7.4.0       # Framework for writing and running tests
+pytest-asyncio>=0.21.0  # Async support for pytest
+black>=23.0.0       # Opinionated Python code formatter
+flake8>=6.0.0       # Python linting and style checking
+
+# Optional: Performance & Monitoring
+psutil>=5.9.0       # System and process utilities for monitoring resources
