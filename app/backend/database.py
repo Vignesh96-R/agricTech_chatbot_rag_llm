@@ -11,6 +11,7 @@ from typing import List, Dict, Any, Optional
 import logging
 
 from app.config import DUCKDB_PATH, DUCKDB_DIR
+from app.backend.models import QueryType
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,9 +23,6 @@ class DatabaseManager:
     def __init__(self, db_path: Path = DUCKDB_PATH):
         """
         Initialize the database manager.
-        
-        Args:
-            db_path: Path to the DuckDB database file
         """
         self.db_path = db_path
         self.connection = None
@@ -76,8 +74,8 @@ class DatabaseManager:
                 CREATE TABLE IF NOT EXISTS tables_metadata (
                     table_name TEXT PRIMARY KEY,
                     role TEXT NOT NULL,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    created_at TIMESTAMP DEFAULT now(),
+                    updated_at TIMESTAMP DEFAULT now()
                 )
             """)
             
@@ -90,7 +88,7 @@ class DatabaseManager:
                     filepath TEXT NOT NULL,
                     file_type TEXT NOT NULL,
                     file_size INTEGER,
-                    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    uploaded_at TIMESTAMP DEFAULT now(),
                     uploaded_by TEXT
                 )
             """)
@@ -103,7 +101,7 @@ class DatabaseManager:
                     role TEXT NOT NULL,
                     query_type TEXT NOT NULL,
                     query_text TEXT,
-                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    timestamp TIMESTAMP DEFAULT now(),
                     success BOOLEAN,
                     error_message TEXT
                 )
@@ -131,10 +129,7 @@ class DatabaseManager:
     
     def get_connection(self) -> duckdb.DuckDBPyConnection:
         """
-        Get the database connection.
-        
-        Returns:
-            DuckDB connection object
+        Get the DuckDB database connection.
         """
         if self.connection is None or self._connection_closed:
             try:
@@ -148,13 +143,6 @@ class DatabaseManager:
     def execute_query(self, query: str, params: Optional[List[Any]] = None) -> List[tuple]:
         """
         Execute a SQL query and return results.
-        
-        Args:
-            query: SQL query to execute
-            params: Query parameters (optional)
-            
-        Returns:
-            List of result tuples
         """
         try:
             conn = self.get_connection()
@@ -170,13 +158,6 @@ class DatabaseManager:
     def execute_query_with_columns(self, query: str, params: Optional[List[Any]] = None) -> Dict[str, Any]:
         """
         Execute a SQL query and return results with column information.
-        
-        Args:
-            query: SQL query to execute
-            params: Query parameters (optional)
-            
-        Returns:
-            Dictionary with 'data' and 'columns' keys
         """
         try:
             conn = self.get_connection()
@@ -196,50 +177,40 @@ class DatabaseManager:
             logger.error(f"Query execution failed: {e}")
             raise
     
-    def create_table_from_dataframe(self, table_name: str, df: pd.DataFrame, role: str) -> bool:
+    def create_table_from_csv_path(self, table_name: str, csv_path: str, role: str) -> bool:
         """
-        Create a table from a pandas DataFrame.
-        
-        Args:
-            table_name: Name of the table to create
-            df: Pandas DataFrame containing the data
-            role: Role associated with this table
-            
-        Returns:
-            True if successful, False otherwise
+        Create a table from a CSV file using DuckDB's native CSV reader.
+        This avoids loading the entire CSV into memory via pandas for large files.
         """
         try:
             conn = self.get_connection()
-            
-            # Create or replace the table
-            conn.execute(f"CREATE OR REPLACE TABLE {table_name} AS SELECT * FROM df")
-            
-            # Update metadata
+            # Use read_csv_auto for robust schema inference; quoting and header handled automatically
+            # Use replace to handle re-uploads
+            conn.execute(
+                f"CREATE OR REPLACE TABLE {table_name} AS SELECT * FROM read_csv_auto(?, header=True)",
+                [csv_path],
+            )
+
             self._upsert_table_metadata(table_name, role)
-            
-            logger.info(f"Table {table_name} created successfully for role {role}")
+            logger.info(f"Table {table_name} created from CSV for role {role}")
             return True
         except Exception as e:
-            logger.error(f"Failed to create table {table_name}: {e}")
+            logger.error(f"Failed to create table {table_name} from CSV: {e}")
             return False
     
     def _upsert_table_metadata(self, table_name: str, role: str):
         """
         Insert or update table metadata.
-        
-        Args:
-            table_name: Name of the table
-            role: Role associated with the table
         """
         try:
             conn = self.get_connection()
             conn.execute("""
                 INSERT INTO tables_metadata (table_name, role, updated_at)
-                VALUES (?, ?, CURRENT_TIMESTAMP)
+                VALUES (?, ?, now())
                 ON CONFLICT (table_name) 
                 DO UPDATE SET 
                     role = excluded.role,
-                    updated_at = CURRENT_TIMESTAMP
+                    updated_at = now()
             """, [table_name, role])
         except Exception as e:
             logger.error(f"Failed to update table metadata: {e}")
@@ -247,25 +218,21 @@ class DatabaseManager:
     def get_allowed_tables_for_role(self, role: str) -> List[str]:
         """
         Get tables that a role can access.
-        
-        Args:
-            role: The user's role
-            
-        Returns:
-            List of accessible table names
         """
         try:
-            if role.lower() == "Admin":
+            # Normalize role for comparisons while preserving original case where needed
+            role_normalized = role.strip()
+            if role_normalized == "Admin":
                 query = "SELECT table_name FROM tables_metadata"
                 result = self.execute_query(query)
-            elif role.lower() == "farmer":
+            elif role_normalized.lower() == "farmer":
                 query = "SELECT table_name FROM tables_metadata WHERE role = 'farmer'"
                 result = self.execute_query(query)
             else:
-                query = """
-                SELECT table_name FROM tables_metadata
-                WHERE role = ? OR role = 'farmer'
-                """
+                query = (
+                    "SELECT table_name FROM tables_metadata "
+                    "WHERE role = ? OR role = 'farmer'"
+                )
                 result = self.execute_query(query, [role])
             
             return [row[0] for row in result]
@@ -273,30 +240,9 @@ class DatabaseManager:
             logger.error(f"Failed to get allowed tables for role {role}: {e}")
             return []
     
-    def is_connection_valid(self) -> bool:
-        """
-        Check if the current database connection is valid.
-        
-        Returns:
-            True if connection is valid, False otherwise
-        """
-        if self.connection is None or self._connection_closed:
-            return False
-        
-        try:
-            # Try a simple query to test the connection
-            self.connection.execute("SELECT 1")
-            return True
-        except Exception:
-            self._connection_closed = True
-            return False
-    
     def is_database_healthy(self) -> bool:
         """
         Check if the database is in a healthy state.
-        
-        Returns:
-            True if database is healthy, False otherwise
         """
         try:
             if self.connection is None or self._connection_closed:
@@ -313,14 +259,6 @@ class DatabaseManager:
                   success: bool, error_message: Optional[str] = None):
         """
         Log a query for auditing purposes.
-        
-        Args:
-            username: Username of the user
-            role: Role of the user
-            query_type: Type of query (SQL/RAG)
-            query_text: The actual query text
-            success: Whether the query was successful
-            error_message: Error message if query failed
         """
         try:
             # Check if database is healthy before logging
@@ -368,36 +306,6 @@ class DatabaseManager:
             logger.info(f"FALLBACK LOG: {username} ({role}) - {query_type}: {query_text} - Success: {success} - Error: {error_message}")
             # Don't raise the exception - logging failure shouldn't break the main functionality
     
-    def get_table_schema(self, table_name: str) -> Optional[List[str]]:
-        """
-        Get the schema (column names) of a table.
-        
-        Args:
-            table_name: Name of the table
-            
-        Returns:
-            List of column names or None if table doesn't exist
-        """
-        try:
-            conn = self.get_connection()
-            result = conn.execute(f"DESCRIBE {table_name}")
-            columns = [row[0] for row in result.fetchall()]
-            return columns
-        except Exception as e:
-            logger.error(f"Failed to get schema for table {table_name}: {e}")
-            return None
-    
-    def reset_connection(self):
-        """Reset the database connection."""
-        try:
-            if self.connection:
-                self.connection.close()
-        except Exception:
-            pass  # Ignore errors when closing
-        finally:
-            self.connection = None
-            self._connection_closed = False
-    
     def safe_reset_connection(self):
         """Safely reset the database connection, handling WAL corruption."""
         try:
@@ -433,59 +341,6 @@ class DatabaseManager:
                 logger.error(f"Error closing database connection: {e}")
                 self._connection_closed = True
     
-    def cleanup_corrupted_files(self):
-        """Clean up corrupted database files and WAL files."""
-        try:
-            import os
-            
-            # Remove WAL file if it exists
-            wal_path = str(self.db_path) + ".wal"
-            if os.path.exists(wal_path):
-                os.remove(wal_path)
-                logger.info("Removed corrupted WAL file")
-            
-            # Remove lock file if it exists
-            lock_path = str(self.db_path) + ".lock"
-            if os.path.exists(lock_path):
-                os.remove(lock_path)
-                logger.info("Removed database lock file")
-            
-            # Remove temporary files
-            temp_path = str(self.db_path) + ".tmp"
-            if os.path.exists(temp_path):
-                os.remove(temp_path)
-                logger.info("Removed temporary database file")
-                
-        except Exception as e:
-            logger.error(f"Failed to cleanup corrupted files: {e}")
-    
-    def reset_database(self):
-        """Reset the entire database by removing all files and reinitializing."""
-        try:
-            import os
-            
-            # Close current connection
-            if self.connection:
-                self.connection.close()
-                self.connection = None
-                self._connection_closed = True
-            
-            # Remove all database files
-            self.cleanup_corrupted_files()
-            
-            # Remove main database file
-            if os.path.exists(self.db_path):
-                os.remove(self.db_path)
-                logger.info("Removed main database file")
-            
-            # Reinitialize
-            self._initialize_database()
-            logger.info("Database reset completed successfully")
-            
-        except Exception as e:
-            logger.error(f"Failed to reset database: {e}")
-            raise
-    
     def __enter__(self):
         """Context manager entry."""
         return self
@@ -497,13 +352,8 @@ class DatabaseManager:
 # Global database manager instance - lazy initialization
 _db_manager = None
 
+# Get the global database manager instance.
 def get_db_manager() -> DatabaseManager:
-    """
-    Get the global database manager instance.
-    
-    Returns:
-        DatabaseManager instance
-    """
     global _db_manager
     
     if _db_manager is None:

@@ -1,9 +1,5 @@
 """
-Secrets and API keys configuration for the Agriculture RBAC-Project.
-
-This module contains all sensitive configuration data including API keys.
-All keys must be stored in environment variables or in a .env file.
-Run 'python setup_environment.py' to create the .env file with required keys.
+Secrets and API keys configuration.
 """
 
 import os
@@ -47,12 +43,6 @@ COHERE_RATE_LIMIT = os.getenv("COHERE_RATE_LIMIT")
 def get_api_key(service_name: str) -> str:
     """
     Get API key for a specific service.
-    
-    Args:
-        service_name: Name of the service (e.g., 'openai', 'grow', 'cohere')
-        
-    Returns:
-        API key string or None if not configured
     """
     api_keys = {
         'openai': OPENAI_API_KEY,
@@ -66,9 +56,6 @@ def get_api_key(service_name: str) -> str:
 def validate_api_keys() -> dict:
     """
     Validate that all required API keys are present.
-    
-    Returns:
-        Dictionary with validation results
     """
     validation_results = {
         'openai': bool(OPENAI_API_KEY),
@@ -82,9 +69,6 @@ def validate_api_keys() -> dict:
 def check_required_keys() -> list:
     """
     Check which required API keys are missing.
-    
-    Returns:
-        List of missing required keys
     """
     required_keys = ['OPENAI_API_KEY', 'GROW_API_KEY', 'COHERE_API_KEY', 'LANGSMITH_API_KEY']
     missing_keys = []
@@ -98,9 +82,6 @@ def check_required_keys() -> list:
 def check_required_config() -> list:
     """
     Check which required configuration values are missing or using defaults.
-    
-    Returns:
-        List of missing or default configuration values
     """
     config_checks = [
         ("ENVIRONMENT", "development"),
@@ -127,9 +108,6 @@ def check_required_config() -> list:
 def validate_all_configuration() -> dict:
     """
     Validate all configuration including API keys and other settings.
-    
-    Returns:
-        Dictionary with comprehensive validation results
     """
     api_validation = validate_api_keys()
     missing_keys = check_required_keys()
@@ -145,9 +123,6 @@ def validate_all_configuration() -> dict:
 def get_config_summary() -> dict:
     """
     Get a summary of the current configuration.
-    
-    Returns:
-        Dictionary with configuration summary
     """
     validation = validate_all_configuration()
     
@@ -162,43 +137,3 @@ def get_config_summary() -> dict:
         'embedding_model': EMBEDDING_MODEL_NAME,
         'llm_model': LLM_MODEL_NAME
     }
-
-def print_config_status():
-    """
-    Print the current configuration status to help with debugging.
-    """
-    print("🔍 Configuration Status:")
-    print(f"Environment: {ENVIRONMENT or 'Not configured'}")
-    print(f"Debug Mode: {DEBUG}")
-    print(f"Chroma Directory: {CHROMA_PERSIST_DIRECTORY or 'Not configured'}")
-    print(f"Embedding Model: {EMBEDDING_MODEL_NAME or 'Not configured'}")
-    print(f"LLM Model: {LLM_MODEL_NAME or 'Not configured'}")
-    
-    print("\n🔑 API Keys Status:")
-    api_status = validate_api_keys()
-    for service, configured in api_status.items():
-        status = "✅ Configured" if configured else "❌ Missing"
-        print(f"  {service.upper()}: {status}")
-    
-    print("\n⚙️  Configuration Status:")
-    missing_config = check_required_config()
-    if missing_config:
-        print(f"❌ Missing or default configuration: {', '.join(missing_config)}")
-        if "SECRET_KEY" in missing_config or "JWT_SECRET_KEY" in missing_config:
-            print("   💡 Use 'python generate_keys.py' to generate secure keys")
-    else:
-        print("✅ All configuration values are properly configured!")
-    
-    missing_keys = check_required_keys()
-    if missing_keys:
-        print(f"\n⚠️  Missing required API keys: {', '.join(missing_keys)}")
-        print("   Run 'python setup_environment.py' to configure your environment")
-    else:
-        print("\n✅ All required API keys are configured!")
-    
-    # Overall status
-    validation = validate_all_configuration()
-    if validation['all_valid']:
-        print("\n🎉 All configuration is valid and ready to use!")
-    else:
-        print(f"\n⚠️  Configuration incomplete. {len(missing_keys)} API keys and {len(missing_config)} config values need attention.")

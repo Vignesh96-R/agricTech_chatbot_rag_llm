@@ -7,6 +7,7 @@ import logging
 
 from app.config import OPENAI_API_KEY, OPENAI_MODEL, FORBIDDEN_SQL_KEYWORDS
 from app.backend.database import get_db_manager
+from app.backend.models import QueryType
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -94,6 +95,16 @@ def translate_nl_to_sql(question: str, allowed_tables: list[str]) -> str:
         
         response_text = response.choices[0].message.content.strip()
         
+        # Clean up markdown code blocks if present
+        if response_text.startswith("```sql"):
+            response_text = response_text[6:]  # Remove ```sql
+        if response_text.startswith("```"):
+            response_text = response_text[3:]  # Remove ```
+        if response_text.endswith("```"):
+            response_text = response_text[:-3]  # Remove trailing ```
+        
+        response_text = response_text.strip()
+        
         logger.debug(f"Raw SQL from LLM: {response_text}")
 
         return response_text
@@ -110,14 +121,14 @@ async def ask_csv(question: str, role: str, username: str, return_sql: bool = Fa
         print(f"[SQL GENERATED]:\n{sql}")
 
         if not is_safe_query(sql):
-            return {"answer": "Only SELECT queries are allowed.", "error": True}
+            return {"answer": "Only SELECT queries are allowed.", "error": True, "query_type": QueryType.UNKNOWN}
 
         raw_matches = extract_tables_from_sql(sql)
         referenced_tables = flatten_matches(raw_matches)
 
         for table in referenced_tables:
             if table not in allowed_tables:
-                return {"answer": f"Access denied to table: {table}", "error": True}
+                return {"answer": f"Access denied to table: {table}", "error": True, "query_type": QueryType.UNKNOWN}
 
         db_manager = get_db_manager()
         result = db_manager.execute_query_with_columns(sql)
@@ -126,7 +137,8 @@ async def ask_csv(question: str, role: str, username: str, return_sql: bool = Fa
 
         markdown_table = tabulate.tabulate(output, headers=columns, tablefmt="github")
         response = {
-            "answer": markdown_table if output else "Query executed, but no results found."
+            "answer": markdown_table if output else "Query executed, but no results found.",
+            "query_type": QueryType.SQL
         }
 
         if return_sql:
@@ -136,4 +148,4 @@ async def ask_csv(question: str, role: str, username: str, return_sql: bool = Fa
 
     except Exception as e:
         logger.error(f"Error in ask_csv: {e}")
-        return {"answer": f"❌ Error: {str(e)}", "error": True}
+        return {"answer": f"❌ Error: {str(e)}", "error": True, "query_type": QueryType.UNKNOWN}

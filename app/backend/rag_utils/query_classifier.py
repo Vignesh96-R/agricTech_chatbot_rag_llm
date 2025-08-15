@@ -2,10 +2,11 @@ from openai import OpenAI
 import os
 import re
 from app.backend.rag_utils.secrets import OPENAI_API_KEY
+from app.backend.models import QueryType
 
 client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
-def _heuristic_detect_query_type(question: str) -> str:
+def _heuristic_detect_query_type(question: str) -> QueryType:
     q = (question or "").lower()
     sql_keywords = [
         "average", "sum", "total", "count", "how many", "filter",
@@ -15,10 +16,10 @@ def _heuristic_detect_query_type(question: str) -> str:
         "list all", "show all", "number of", "details of"
     ]
     if any(kw in q for kw in sql_keywords):
-        return "SQL"
-    return "RAG"
+        return QueryType.SQL
+    return QueryType.RAG
 
-def detect_query_type_llm(question: str) -> str:
+def detect_query_type_llm(question: str) -> QueryType:
     # Fast local heuristic first to avoid latency and external dependency
     heuristic = _heuristic_detect_query_type(question)
 
@@ -49,8 +50,10 @@ Question: "{question}"
         )
 
         label = (response.choices[0].message.content or "").strip().upper()
-        if label in {"SQL", "RAG"}:
-            return label
+        if label == "SQL":
+            return QueryType.SQL
+        elif label == "RAG":
+            return QueryType.RAG
         return heuristic
     except Exception:
         # Network/model errors → graceful fallback

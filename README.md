@@ -389,7 +389,6 @@ conda install -c conda-forge duckdb -y
 # API Endpoints
 - `GET /login` - User authentication
 - `GET /roles` - List available roles
-- `GET /available-docs` - Get documents accessible to the authenticated user
 - `POST /upload-docs` - Upload new documents (Admin only)
 - `POST /chat` - Chat with the RAG system
 

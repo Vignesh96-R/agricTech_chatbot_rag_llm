@@ -153,12 +153,6 @@ def validate_role_access(user_role: str, allowed_roles: list = None) -> bool:
 def get_role_filter(user_role: str) -> dict:
     """
     Get the appropriate ChromaDB filter for a user role.
-    
-    Args:
-        user_role: The user's role
-        
-    Returns:
-        ChromaDB filter dictionary
     """
     # Map authentication role names to metadata role names
     role_mapping = {
