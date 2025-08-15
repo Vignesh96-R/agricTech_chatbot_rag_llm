@@ -1,1 +1,0 @@
-On May 4, 1960, the U.S. Civil Aeronautics Board approved the merger of National Airlines and Pan American World Airways, a deal worth around $17 million, marking one of the significant airline industry consolidations that influenced stock market and investment trends in the 1960s.

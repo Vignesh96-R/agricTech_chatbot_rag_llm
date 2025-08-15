@@ -1,7 +1,6 @@
 .venv
 
 # API Keys and sensitive configuration
-app/rag_utils/secret_key.py
 *.env
 .env
 

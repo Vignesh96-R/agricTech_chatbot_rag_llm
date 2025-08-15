@@ -44,11 +44,5 @@ tabulate>=0.9.0     # Pretty-print tabular data in Python
 # Utilities
 python-dateutil>=2.8.0  # Powerful extensions to Python's datetime module
 
-# Development & Testing (optional)
-pytest>=7.4.0       # Framework for writing and running tests
-pytest-asyncio>=0.21.0  # Async support for pytest
-black>=23.0.0       # Opinionated Python code formatter
-flake8>=6.0.0       # Python linting and style checking
-
 # Optional: Performance & Monitoring
 psutil>=5.9.0       # System and process utilities for monitoring resources
