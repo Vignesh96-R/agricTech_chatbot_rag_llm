@@ -9,7 +9,7 @@ This project implements an advanced **Retrieval-Augmented Generation (RAG)** sys
 * Use any of the pre-configured usernames and passwords to log in
 * The system will automatically load and index documents from the resources_2 folder
 * Users can only access documents based on their assigned role
-* The project now has a centralized secrets management system located in `app/rag_utils/secrets.py` that provides: Secure storage of API keys, Environment variable support, Backward compatibility for existing code, Utility functions for key management
+* The project now has a centralized secrets management system located in `app/backend/rag_utils/secrets.py` that provides: Secure storage of API keys, Environment variable support, Backward compatibility for existing code, Utility functions for key management
 * if library installation fails with python use alternate solution as 'Conda'
 
 ## Prerequisites
@@ -420,19 +420,19 @@ conda install -c conda-forge duckdb -y
 - Path definitions
 - Feature flags
 
-### `app/models.py`
+### `app/backend/models.py`
 - Pydantic data models
 - Request/response schemas
 - Data validation rules
 - Type definitions
 
-### `app/auth.py`
+### `app/backend/auth.py`
 - User authentication
 - Role-based access control
 - Password management
 - Security utilities
 
-### `app/database.py`
+### `app/backend/database.py`
 - Database connections
 - Query execution
 - Table management
@@ -450,13 +450,13 @@ conda install -c conda-forge duckdb -y
 - Layout functions
 - Design system
 
-### `app/utils.py`
+### `app/backend/utils.py`
 - File operations
 - Validation functions
 - Formatting utilities
 - Common helpers
 
-### `app/rag_utils/`
+### `app/backend/rag_utils/`
 - RAG implementation
 - Vector database operations
 - Query processing

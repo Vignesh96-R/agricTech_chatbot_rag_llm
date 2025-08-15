@@ -2,7 +2,6 @@
 
 .main {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    min-height: 100vh;
 }
 
 .stApp {
@@ -113,6 +112,10 @@
     margin-bottom: 40px;
 }
 
+.st-emotion-cache-18j4t62 {
+    display: block;
+}
+
 .hero-title {
     font-size: 4rem;
     font-weight: 800;
@@ -190,6 +193,7 @@
     border-radius: 20px;
     padding: 25px;
     margin: 15px 0;
+    margin-top: 30px;
     border: 1px solid rgba(0, 212, 170, 0.2);
     transition: all 0.3s ease;
 }

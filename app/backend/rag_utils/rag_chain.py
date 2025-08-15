@@ -94,7 +94,10 @@ async def ask_rag(question: str, role: str, cohere_api_key: str = None) -> dict:
     logger.info(f"RAG query from role '{role}': {question}")
     
     # Get RAG chain with role-based filtering
-    chain = get_rag_chain(user_role=role, cohere_api_key=cohere_api_key)
-    result = chain({"input": question})
-    
-    return {"answer": result["answer"]}
+    try:
+        chain = get_rag_chain(user_role=role, cohere_api_key=cohere_api_key)
+        result = chain({"input": question})
+        return {"answer": result.get("answer", "No answer generated.")}
+    except Exception as e:
+        logger.error(f"RAG pipeline failed: {e}")
+        return {"answer": "Sorry, the AI service is temporarily unavailable. Please try again in a moment."}

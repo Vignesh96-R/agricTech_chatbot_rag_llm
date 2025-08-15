@@ -49,7 +49,11 @@ if "roles" not in st.session_state:
 # Load roles into session state if not present
 def fetch_roles():
     try:
-        role_res = requests.get(f"{API_URL}/roles", auth=HTTPBasicAuth(*st.session_state.auth))
+        role_res = requests.get(
+            f"{API_URL}/roles",
+            auth=HTTPBasicAuth(*st.session_state.auth),
+            timeout=30,
+        )
         return role_res.json().get("roles", [])
     except:
         return []
@@ -72,7 +76,11 @@ if st.session_state.page == "login":
                 show_toast("Please enter both username and password.", variant="error", duration=3)
             else:
                 try:
-                    res = requests.get(f"{API_URL}/login", auth=HTTPBasicAuth(username, password))
+                    res = requests.get(
+                        f"{API_URL}/login",
+                        auth=HTTPBasicAuth(username, password),
+                        timeout=30,
+                    )
                     if res.status_code == 200:
                         st.session_state.auth = (username, password)
                         st.session_state.username = username
@@ -125,7 +133,8 @@ if st.session_state.page == "main":
                     res = requests.post(
                         f"{API_URL}/chat",
                         json={"question": question, "role": st.session_state.role},
-                        auth=HTTPBasicAuth(*st.session_state.auth)
+                        auth=HTTPBasicAuth(*st.session_state.auth),
+                        timeout=60,
                     )
                     
                     if res.status_code == 200:
@@ -155,7 +164,8 @@ if st.session_state.page == "main":
                             f"{API_URL}/upload-docs",
                             files={"file": file},
                             data={"role": selected_role},
-                            auth=HTTPBasicAuth(*st.session_state.auth)
+                            auth=HTTPBasicAuth(*st.session_state.auth),
+                            timeout=120,
                         )
                         
                         if res.ok:
@@ -187,7 +197,8 @@ if st.session_state.page == "main":
                     res = requests.post(
                         f"{API_URL}/chat",
                         json={"question": question, "role": st.session_state.role},
-                        auth=HTTPBasicAuth(*st.session_state.auth)
+                        auth=HTTPBasicAuth(*st.session_state.auth),
+                        timeout=60,
                     )
                     
                     if res.status_code == 200:

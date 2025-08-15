@@ -139,8 +139,12 @@ def validate_role_access(user_role: str, allowed_roles: list = None) -> bool:
     Validate if a user role has access to specific document roles.(True for valid)
     """
     if not allowed_roles:
-        if user_role.lower() == "Admin":
-            allowed_roles = ["agriculture expert", "farmer", "field worker", "finance officer", "hr", "market analysis", "salesperson", "supply chain manager"]
+        if user_role.lower() == "admin":
+            allowed_roles = [
+                "agriculture expert", "farmer", "field worker",
+                "finance officer", "hr", "market analysis",
+                "salesperson", "supply chain manager",
+            ]
         else:
             allowed_roles = [user_role.lower()]
     
@@ -158,7 +162,7 @@ def get_role_filter(user_role: str) -> dict:
     """
     # Map authentication role names to metadata role names
     role_mapping = {
-        "Admin": "Admin",
+        "admin": "admin",
         "agriculture expert": "agriculture expert",
         "farmer": "farmer",
         "field worker": "field worker",
@@ -173,7 +177,7 @@ def get_role_filter(user_role: str) -> dict:
     user_role_lower = user_role.lower()
     metadata_role = role_mapping.get(user_role_lower, user_role_lower)
     
-    if metadata_role == "Admin":
+    if user_role_lower == "admin":
         # Admin sees everything - no filter
         return {}
     else:
@@ -206,7 +210,8 @@ chat_prompt = ChatPromptTemplate.from_messages([
 # ==============================
 model = ChatOpenAI(
     model="gpt-4o",  
-    temperature=0.2
+    temperature=0.2,
+    max_retries=1,
 )
 
 question_answering_chain = create_stuff_documents_chain(model, chat_prompt)

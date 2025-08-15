@@ -48,7 +48,7 @@ def render_login_form():
     
     col_a, col_b, col_c = st.columns([1, 2, 1])
     with col_b:
-        login_button = st.button("🚀 Access Platform", use_container_width=True)
+        login_button = st.button("Sign In", use_container_width=True)
     
     st.markdown("</div>", unsafe_allow_html=True)
     
@@ -102,7 +102,7 @@ def render_chat_interface():
     
     col_a, col_b, col_c = st.columns([1, 2, 1])
     with col_b:
-        submit_button = st.button("🚀 Get AI Response", use_container_width=True)
+        submit_button = st.button("🚀 Get Response", use_container_width=True)
     
     st.markdown("</div>", unsafe_allow_html=True)
     
