@@ -4,7 +4,7 @@ from requests.auth import HTTPBasicAuth
 from typing import List, Optional
 
 from app.config import API_URL
-from app.ui_components import (
+from app.frontend.ui_components import (
     load_custom_css, render_hero_section, render_login_form,
     render_user_header, render_chat_interface, render_upload_interface,
     render_ai_response, render_loading_indicator, show_toast

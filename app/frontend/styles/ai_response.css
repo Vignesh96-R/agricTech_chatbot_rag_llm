@@ -1,0 +1,49 @@
+/* Style the markdown block immediately following the anchor */
+.ai-response-anchor+div {
+    background: rgba(13, 17, 23, 0.85) !important;
+    border: 1px solid rgba(0, 212, 170, 0.25);
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    margin: 12px 0 6px 0;
+}
+
+.ai-response-anchor+div h1,
+.ai-response-anchor+div h2,
+.ai-response-anchor+div h3,
+.ai-response-anchor+div h4 {
+    color: #00d4aa !important;
+    margin: 0 0 8px 0;
+}
+
+.ai-response-anchor+div p {
+    color: #e2e8f0 !important;
+    margin: 4px 0;
+    line-height: 1.35;
+}
+
+.ai-response-anchor+div ul,
+.ai-response-anchor+div ol {
+    margin: 4px 0 4px 18px;
+    padding-left: 1rem;
+}
+
+.ai-response-anchor+div li {
+    margin: 2px 0;
+}
+
+.typing-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em;
+    margin-left: 2px;
+    background: #e2e8f0;
+    animation: blink 1s step-start infinite;
+    vertical-align: -2px;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}

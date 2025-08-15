@@ -6,7 +6,7 @@ from pathlib import Path
 import logging
 
 from app.config import OPENAI_API_KEY, OPENAI_MODEL, FORBIDDEN_SQL_KEYWORDS
-from app.database import get_db_manager
+from app.backend.database import get_db_manager
 
 # Configure logging
 logger = logging.getLogger(__name__)

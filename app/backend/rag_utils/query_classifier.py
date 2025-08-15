@@ -1,6 +1,6 @@
 from openai import OpenAI
 import os
-from app.rag_utils.secrets import OPENAI_API_KEY
+from app.backend.rag_utils.secrets import OPENAI_API_KEY
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 

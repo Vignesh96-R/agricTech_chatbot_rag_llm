@@ -23,7 +23,7 @@ def run_backend():
     try:
         subprocess.run([
             sys.executable, "-m", "uvicorn", 
-            "app.main:app", 
+            "app.backend.main:app", 
             "--host", "0.0.0.0", 
             "--port", "8000",
             "--reload"
@@ -40,7 +40,7 @@ def run_frontend():
     try:
         subprocess.run([
             sys.executable, "-m", "streamlit", "run", 
-            "app/ui.py",
+            "app/frontend/ui.py",
             "--server.port", "8501",
             "--server.address", "localhost"
         ])
@@ -59,7 +59,7 @@ def run_both():
         # Start backend in background
         backend_process = subprocess.Popen([
             sys.executable, "-m", "uvicorn", 
-            "app.main:app", 
+            "app.backend.main:app", 
             "--host", "0.0.0.0", 
             "--port", "8000"
         ])
@@ -67,7 +67,7 @@ def run_both():
         # Start frontend
         frontend_process = subprocess.Popen([
             sys.executable, "-m", "streamlit", "run", 
-            "app/ui.py",
+            "app/frontend/ui.py",
             "--server.port", "8501",
             "--server.address", "localhost"
         ])

@@ -2,7 +2,6 @@
 from pathlib import Path
 import os
 import pandas as pd
-from collections import defaultdict
 from langchain_core.documents import Document
 
 from langchain_community.document_loaders import UnstructuredMarkdownLoader
@@ -137,14 +136,7 @@ def run_indexer():
 # ==============================
 def validate_role_access(user_role: str, allowed_roles: list = None) -> bool:
     """
-    Validate if a user role has access to specific document roles.
-    
-    Args:
-        user_role: The user's role
-        allowed_roles: List of roles the user can access (defaults to user_role)
-        
-    Returns:
-        True if access is valid, False otherwise
+    Validate if a user role has access to specific document roles.(True for valid)
     """
     if not allowed_roles:
         if user_role.lower() == "Admin":
@@ -283,25 +275,3 @@ def get_rag_chain(user_role: str,cohere_api_key: str = None):
         }
     
     return create_chain
-
-
-"""
-# ========== MAIN EXECUTION ==========
-if __name__ == "__main__":
-    run_indexer() 
-"""
-    # ========== EXAMPLE USAGE ==========
-"""
-    user_role = "hr" 
-    rag_chain = get_rag_chain(user_role)
-
-    
-    query = "give me Campaign Highlights from marketing summary."
-    response = rag_chain.invoke({"input": query})
-
-    print((response["answer"]))
-    for doc in response.get("context", []):
-        print(f"Source: {doc.metadata['source']}, Role: {doc.metadata.get('role')}")
-
-"""
-

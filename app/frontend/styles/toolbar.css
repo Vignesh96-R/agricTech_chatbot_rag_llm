@@ -1,0 +1,93 @@
+.fixed-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: rgba(26, 26, 46, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 212, 170, 0.3);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.toolbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.toolbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.toolbar-brand h1 {
+    color: #00d4aa;
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 212, 170, 0.3);
+}
+
+.toolbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.role-badge-toolbar {
+    background: linear-gradient(135deg, #00d4aa 0%, #0099cc 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 6px 20px rgba(0, 212, 170, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
+}
+
+.role-badge-toolbar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 212, 170, 0.5);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.toolbar-spacer {
+    height: 80px;
+}
+
+/* Compact overrides */
+@media (max-width: 1200px) {
+    .fixed-toolbar {
+        padding: 8px 16px;
+    }
+
+    .toolbar-spacer {
+        height: 56px;
+    }
+
+    .toolbar-brand h1 {
+        font-size: 1.3rem;
+    }
+
+    .role-badge-toolbar {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        border-radius: 16px;
+        min-width: 60px;
+    }
+}

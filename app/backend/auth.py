@@ -12,7 +12,7 @@ from typing import Dict, Optional
 import secrets
 
 from app.config import STATIC_USERS, ROLE_DOCS_MAPPING
-from app.models import UserInfo
+from app.backend.models import UserInfo
 
 # Security scheme
 security = HTTPBasic()

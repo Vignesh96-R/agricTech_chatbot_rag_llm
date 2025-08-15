@@ -2,21 +2,18 @@ import pandas as pd
 from pathlib import Path
 import logging
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Depends, BackgroundTasks
-from fastapi.responses import JSONResponse
-from langchain_community.embeddings.openai import OpenAIEmbeddings
-from langchain_core.documents import Document
 
 from app.config import (
-    AVAILABLE_ROLES, ROLE_DOCS_MAPPING, ALLOWED_EXTENSIONS, 
+    AVAILABLE_ROLES, ALLOWED_EXTENSIONS, 
     MAX_FILE_SIZE, UPLOADS_DIR, RESOURCES_DIR
 )
-from app.models import ChatRequest, ChatResponse, UploadResponse, AvailableDocsResponse, LoginResponse, HealthCheck
-from app.auth import authenticate_user, require_c_level_access, get_user_role_dependencies
-from app.database import get_db_manager
-from app.rag_utils.rag_module import run_indexer, vectorstore, get_rag_chain
-from app.rag_utils.query_classifier import detect_query_type_llm
-from app.rag_utils.csv_query import ask_csv
-from app.rag_utils.rag_chain import ask_rag
+from app.backend.models import ChatRequest, ChatResponse, UploadResponse, AvailableDocsResponse, LoginResponse, HealthCheck
+from app.backend.auth import authenticate_user, require_c_level_access, get_user_role_dependencies
+from app.backend.database import get_db_manager
+from app.backend.rag_utils.rag_module import run_indexer, vectorstore, get_rag_chain
+from app.backend.rag_utils.query_classifier import detect_query_type_llm
+from app.backend.rag_utils.csv_query import ask_csv
+from app.backend.rag_utils.rag_chain import ask_rag
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

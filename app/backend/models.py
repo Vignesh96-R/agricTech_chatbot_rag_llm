@@ -15,15 +15,6 @@ class QueryType(str, Enum):
     RAG = "RAG"
     UNKNOWN = "UNKNOWN"
 
-class UserRole(str, Enum):
-    """Enumeration of available user roles."""
-    C_LEVEL = "Admin"
-    MARKETING = "Marketing"
-    HR = "HR"
-    FINANCE = "Finance"
-    ENGINEERING = "Engineering"
-    GENERAL = "General"
-
 class ChatRequest(BaseModel):
     """Request model for chat queries."""
     question: str = Field(..., min_length=1, max_length=1000, description="The question to ask")

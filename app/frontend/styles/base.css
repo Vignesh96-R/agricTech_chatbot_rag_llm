@@ -1,0 +1,324 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+.main {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+}
+
+.stApp {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    font-family: 'Poppins', sans-serif;
+}
+
+.stButton>button {
+    background: linear-gradient(90deg, #00d4aa 0%, #0099cc 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 30px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stButton>button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0, 212, 170, 0.4);
+    background: linear-gradient(90deg, #00b894 0%, #00a8cc 100%);
+}
+
+.stTextInput>div>div>input {
+    border-radius: 12px;
+    border: 2px solid #2d3748;
+    padding: 15px 20px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: rgba(45, 55, 72, 0.8);
+    color: #e2e8f0;
+    backdrop-filter: blur(10px);
+}
+
+.stTextInput>div>div>input:focus {
+    border-color: #00d4aa;
+    box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+    background: rgba(45, 55, 72, 0.9);
+}
+
+.stTextInput>div>div>input::placeholder {
+    color: #a0aec0;
+}
+
+.stSelectbox>div>div>div {
+    border-radius: 12px;
+    border: 2px solid #2d3748;
+    background: rgba(45, 55, 72, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.stFileUploader>div>div>div {
+    border-radius: 12px;
+    border: 2px solid #2d3748;
+    background: rgba(45, 55, 72, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.stTabs>div>div>div>div {
+    background: rgba(45, 55, 72, 0.3);
+    border-radius: 12px;
+    padding: 5px;
+    backdrop-filter: blur(10px);
+}
+
+.stTabs>div>div>div>div>button {
+    background: transparent;
+    color: #e2e8f0;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    margin: 2px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.stTabs>div>div>div>div>button[aria-selected="true"] {
+    background: linear-gradient(90deg, #00d4aa 0%, #0099cc 100%);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+    color: white;
+}
+
+.stTabs>div>div>div>div>button:hover {
+    background: rgba(0, 212, 170, 0.1);
+    transform: translateY(-1px);
+    color: #00d4aa;
+}
+
+.glass-card {
+    background: rgba(45, 55, 72, 0.4);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(0, 212, 170, 0.2);
+    padding: 30px;
+    margin: 20px 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.hero-section {
+    text-align: center;
+    padding-top: 20px;
+    margin-bottom: 40px;
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #00d4aa 0%, #0099cc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    letter-spacing: -1px;
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    color: rgba(226, 232, 240, 0.9);
+    font-weight: 400;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.user-info-card {
+    background: rgba(45, 55, 72, 0.6);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid rgba(0, 212, 170, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.chat-container {
+    background: rgba(45, 55, 72, 0.8);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 212, 170, 0.2);
+    backdrop-filter: blur(15px);
+}
+
+.success-message {
+    background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+    color: white;
+    padding: 20px 25px;
+    border-radius: 15px;
+    margin: 15px 0;
+    box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+    border-left: 4px solid #00b894;
+}
+
+.error-message {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    padding: 20px 25px;
+    border-radius: 15px;
+    margin: 15px 0;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    border-left: 4px solid #ee5a52;
+}
+
+.role-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #00d4aa 0%, #0099cc 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 5px;
+    box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.feature-card {
+    background: rgba(45, 55, 72, 0.4);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 15px 0;
+    border: 1px solid rgba(0, 212, 170, 0.2);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 212, 170, 0.4);
+}
+
+.upload-area {
+    border: 2px dashed rgba(0, 212, 170, 0.5);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    background: rgba(45, 55, 72, 0.2);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.upload-area:hover {
+    border-color: rgba(0, 212, 170, 0.8);
+    background: rgba(45, 55, 72, 0.3);
+}
+
+.admin-section {
+    background: rgba(45, 55, 72, 0.4);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 20px 0;
+    border: 1px solid rgba(0, 212, 170, 0.2);
+}
+
+.stMarkdown {
+    color: #e2e8f0;
+}
+
+.stSubheader {
+    color: #00d4aa;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.stMarkdown p {
+    color: rgba(226, 232, 240, 0.9);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.stMarkdown h1,
+.stMarkdown h2,
+.stMarkdown h3 {
+    color: #00d4aa;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(45, 55, 72, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #00d4aa 0%, #0099cc 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #00b894 0%, #00a8cc 100%);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.glass-card,
+.chat-container,
+.user-info-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Compact overrides */
+.stButton>button {
+    padding: 8px 18px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+.stTextInput>div>div>input {
+    padding: 10px 14px;
+    font-size: 14px;
+}
+
+.stTabs>div>div>div>div>button {
+    padding: 8px 14px;
+    font-size: 13px;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+}
+
+.stMarkdown p {
+    font-size: 1.0rem;
+    line-height: 1.5;
+}
+
+.stMarkdown h1 {
+    font-size: 2rem;
+}
+
+.stMarkdown h2 {
+    font-size: 1.3rem;
+}
+
+.stMarkdown h3 {
+    font-size: 1.15rem;
+}

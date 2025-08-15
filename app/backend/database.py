@@ -258,13 +258,13 @@ class DatabaseManager:
             if role.lower() == "Admin":
                 query = "SELECT table_name FROM tables_metadata"
                 result = self.execute_query(query)
-            elif role.lower() == "general":
-                query = "SELECT table_name FROM tables_metadata WHERE role = 'general'"
+            elif role.lower() == "farmer":
+                query = "SELECT table_name FROM tables_metadata WHERE role = 'farmer'"
                 result = self.execute_query(query)
             else:
                 query = """
                 SELECT table_name FROM tables_metadata
-                WHERE role = ? OR role = 'general'
+                WHERE role = ? OR role = 'farmer'
                 """
                 result = self.execute_query(query, [role])
             

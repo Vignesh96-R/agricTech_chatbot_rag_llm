@@ -31,8 +31,8 @@ API_URL = f"http://{API_HOST}:{API_PORT}"
 
 # Import secrets - handle import gracefully for different contexts
 try:
-    # Try relative import first (when imported as part of app package)
-    from .rag_utils.secrets import (
+    # Preferred absolute import from new backend location
+    from app.backend.rag_utils.secrets import (
         OPENAI_API_KEY, 
         GROW_API_KEY, 
         LANGSMITH_API_KEY, 
@@ -43,8 +43,8 @@ try:
     )
 except ImportError:
     try:
-        # Try absolute import (when running from app directory)
-        from rag_utils.secrets import (
+        # Fallback to relative import when accessed within the app package
+        from .backend.rag_utils.secrets import (
             OPENAI_API_KEY, 
             GROW_API_KEY, 
             LANGSMITH_API_KEY, 

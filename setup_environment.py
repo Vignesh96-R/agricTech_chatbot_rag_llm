@@ -188,7 +188,7 @@ def validate_env_file():
     
     # Import secrets module to check configuration
     try:
-        from app.rag_utils.secrets import print_config_status
+        from app.backend.rag_utils.secrets import print_config_status
         print_config_status()
     except ImportError as e:
         print(f"❌ Error importing secrets module: {e}")

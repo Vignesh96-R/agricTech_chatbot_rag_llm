@@ -88,7 +88,7 @@ python setup_environment.py
 ### 7. Validate Configuration
 You can also check your configuration status at any time using the secrets module:
 ```bash
-python -c "from app.rag_utils.secrets import print_config_status; print_config_status()"
+python -c "from app.backend.rag_utils.secrets import print_config_status; print_config_status()"
 ```
 
 This will show you exactly which configuration values are missing or using default values.
@@ -299,7 +299,7 @@ curl -X POST "http://localhost:8000/chat" -H "Content-Type: application/json" -d
 curl -X POST "http://localhost:8000/chat" -H "Content-Type: application/json" -d '{"question": "What are the employee salary records?"}' -u "farmer:farmer"
 
 * Test import library
-python -c "from app.main import chat; import asyncio; print('Testing main.py validation...')"
+python -c "from app.backend.main import chat; import asyncio; print('Testing backend/main.py validation...')"
 
 * Health check
 curl -s http://localhost:8000/health
@@ -344,11 +344,11 @@ python run_app.py
 
 # Run only backend
 python run_app.py --backend
-# python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+# python -m uvicorn app.backend.main:app --host 0.0.0.0 --port 8000
 
 # Run only frontend
 python run_app.py --frontend
-# streamlit run app/ui.py --server.port 8501 --server.address localhost
+# streamlit run app/frontend/ui.py --server.port 8501 --server.address localhost
 
 # Check dependencies
 python run_app.py --check
@@ -406,56 +406,9 @@ conda install -c conda-forge duckdb -y
 * The LLM then generates a coherent answer from the retrieved chunks.
 * The final **RAG-based response** is sent back to the user.
 
-# **Library Architecture Diagram**
-
-
-
-
-## Project Layout
-
-```
-RBAC-Project/
-├── app/                          # Main application package
-│   ├── __init__.py              # Package initialization and exports
-│   ├── main.py                  # FastAPI application and routes
-│   ├── config.py                # Configuration settings and constants
-│   ├── models.py                # Pydantic data models and schemas
-│   ├── auth.py                  # Authentication and authorization logic
-│   ├── database.py              # Database operations and management
-│   ├── utils.py                 # Common utility functions
-│   ├── ui.py                    # Main Streamlit UI application
-│   ├── ui_components.py         # Reusable UI components and styling
-│   └── rag_utils/               # RAG and AI-related utilities
-│       ├── __init__.py          # RAG utilities package init
-│       ├── rag_module.py        # RAG indexing and vector store
-│       ├── rag_chain.py         # RAG query processing
-│       ├── query_classifier.py  # Query type detection
-│       └── csv_query.py         # CSV/SQL query processing
-├── resources/                    # Application resources
-│   └── data/                    # Document data organized by role
-│       ├── engineering/         # Engineering documents
-│       ├── finance/            # Finance documents
-│       ├── general/            # General documents
-│       ├── hr/                 # HR documents
-│       └── marketing/          # Marketing documents
-├── static/                      # Static files and uploads
-│   ├── data/                   # Database files
-│   ├── images/                 # Application images
-│   └── uploads/                # User uploaded files by role
-├── tests/                       # Test files
-├── assets/                      # UI assets
-├── chroma_db/                   # Vector database storage
-├── requirements.txt             # Python dependencies
-├── pyproject.toml              # Project configuration
-├── README.md                    # Project documentation
-└── PROJECT_STRUCTURE.md         # This file
-```
-
-
-
 ## Module Responsibilities
 
-### `app/main.py`
+### `app/backend/main.py`
 - FastAPI application setup
 - API route definitions
 - Request/response handling
@@ -485,13 +438,13 @@ RBAC-Project/
 - Table management
 - Data persistence
 
-### `app/ui.py`
+### `app/frontend/ui.py`
 - Main Streamlit application
 - Page routing
 - State management
 - API integration
 
-### `app/ui_components.py`
+### `app/frontend/ui_components.py`
 - Reusable UI components
 - CSS styling
 - Layout functions
